@@ -1,4 +1,4 @@
-# 🚀 MH2 IT Center MCQ Exam System
+# 🚀 MH2 IT Center Exam System
 
 A modern **Online MCQ Examination Platform** developed for **MH2 IT Center** to conduct computer competency exams through a clean, interactive, and responsive web interface.
 
