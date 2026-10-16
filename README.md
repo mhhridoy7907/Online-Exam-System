@@ -63,25 +63,7 @@ The following features are planned for the Firebase-powered upgrade and are not 
 
 The current prototype includes the following interfaces:
 
-### 🔐 Exam Start Page
 
-Students enter the configured start password before proceeding to the examination.
-
-![Exam Start Preview](code/D.png)
-
-### 📝 Examination Interface
-
-Students answer multiple-choice questions while the countdown timer tracks the remaining time.
-
-![MCQ Exam Preview](code/D2.png)
-
-### 📊 Examination Results
-
-The result screen displays the total number of questions, correct answers, incorrect answers, unanswered questions, and calculated score.
-
-![Exam Result Preview](code/D3.png)
-
----
 
 ## 🛠️ Technology Stack
 
