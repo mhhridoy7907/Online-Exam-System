@@ -14,7 +14,7 @@ header{
   width:100%;
   display:flex;
   align-items:center;
-  justify-content:flex-start; /* logo left, text right */
+  justify-content:flex-start; 
   padding:10px 20px;
   background:#000000;
   font-size:28px;

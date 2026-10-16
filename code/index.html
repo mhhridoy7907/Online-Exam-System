@@ -1,55 +1,132 @@
+
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MH2 IT Center - MCQ Exam</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#071b22">
+  <meta name="description" content="MH2 IT Center Online MCQ and Written Examination">
+  <title>MH2 IT Center - Student Exam</title>
 
-  <link rel="stylesheet" herf="style.css">
   
 </head>
-<body oncontextmenu="return false">
 
-<header>
-  <div class="flip-container" id="flipLogo">
-    <div class="flip-container-inner">
-      <img src="https://i.pinimg.com/736x/df/1d/9a/df1d9a56ddb5b483abcf894814c8486b.jpg" class="front" alt="logo">
-      <img src="https://i.pinimg.com/736x/ce/58/c1/ce58c1d1278349c500426a7ef0f6908f.jpg" class="back" alt="logo">
+<body>
+  <header>
+    <img
+      class="logo"
+      src="https://i.pinimg.com/736x/df/1d/9a/df1d9a56ddb5b483abcf894814c8486b.jpg"
+      alt="MH2 IT Center logo"
+    >
+    <div class="brand">
+      MH2 IT Center
+      <small>Online Examination System</small>
     </div>
+  </header>
+
+  <div id="timerBar" class="timer hidden">
+    Time Left: <span id="timer">30:00</span>
   </div>
-  <span>MH2 IT Center</span>
-</header>
 
-<div id="examTimer">Time Left: 30:00</div>
+  <main>
+    <section id="loadingCard" class="card">
+      <h2>পরীক্ষার তথ্য লোড হচ্ছে...</h2>
+      <p class="muted">Firebase থেকে পরীক্ষা ও প্রশ্ন সংগ্রহ করা হচ্ছে।</p>
+    </section>
 
-<div id="lock" class="lock fadeIn">
-  <h2>Office Software Competency Exam <br>Start Password</h2>
-  <input type="password" id="startPass" placeholder="Enter Password">
-  <br>
-  <button onclick="startExam()">Start Exam</button>
-</div>
+    <section id="noticeCard" class="card hidden">
+      <h1 id="noticeTitle">পরীক্ষা উপলভ্য নয়</h1>
+      <p id="noticeText" class="muted"></p>
+      <button class="btn secondary" onclick="location.reload()">
+        আবার চেষ্টা করুন
+      </button>
+    </section>
 
-<div id="countdown" class="lock" style="display:none">
-  <h2>Exam starting in....</h2>
-  <p id="count">5</p>
-</div>
+    <section id="loginCard" class="card hidden">
+      <h1 id="examTitle">MH2 IT Center Examination</h1>
+      <p id="examInstructions" class="muted">
+        পরীক্ষার আগে তোমার তথ্য পূরণ করো।
+      </p>
 
-<div class="container" id="exam" style="display:none"></div>
+      <div class="status" id="enabledTypes"></div>
 
-<div style="text-align:center; display:none" id="submitDiv">
-  <button onclick="submitExam()">Submit Exam</button>
-</div>
+      <form id="studentForm">
+        <div class="field">
+          <label class="field-label" for="studentName">শিক্ষার্থীর নাম</label>
+          <input id="studentName" type="text"
+            maxlength="100" autocomplete="name" required>
+        </div>
 
-<div id="result"></div>
+        <div class="field">
+          <label class="field-label" for="studentId">Student ID</label>
+          <input id="studentId" type="text"
+            maxlength="50" autocomplete="off" required>
+        </div>
 
-<div style="text-align:center; display:none" id="restartDiv">
-  <button onclick="restartExam()">home back</button>
-</div>
+        <div class="field hidden" id="examCodeField">
+          <label class="field-label" for="examCode">Exam Code</label>
+          <input id="examCode" type="password"
+            maxlength="80" autocomplete="off">
+        </div>
 
-              
-  
-  <script src="funtion.js> </script>
+        <div class="status" id="loginStatus">
+          পরীক্ষা শুরু করার আগে সব তথ্য যাচাই করো।
+        </div>
 
+        <button class="btn full" id="startButton" type="submit">
+          পরীক্ষা শুরু করো
+        </button>
+      </form>
+    </section>
+
+    <section id="examCard" class="hidden">
+      <div class="card">
+        <h1 id="activeExamTitle">পরীক্ষা</h1>
+        <div class="meta">
+          <span id="studentInfo"></span>
+          <span id="questionCount"></span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-bar" id="progressBar"></div>
+        </div>
+        <p class="muted">
+          উত্তরগুলো নিয়মিত সংরক্ষণ করো। পরীক্ষা শেষ হলে Submit Exam চাপবে।
+        </p>
+        <div id="saveStatus" class="status">উত্তর প্রস্তুত।</div>
+      </div>
+
+      <div id="questionsContainer"></div>
+
+      <div class="card">
+        <h2>পরীক্ষা জমা</h2>
+        <p class="muted">
+          জমা দেওয়ার আগে উত্তরগুলো যাচাই করে নাও। জমা দেওয়ার পর এই attempt
+          থেকে আর উত্তর পরিবর্তন করা যাবে না।
+        </p>
+        <div class="actions">
+          <button id="submitButton" class="btn full" type="button">
+            Submit Exam
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section id="resultCard" class="card hidden">
+      <h1 id="resultTitle">পরীক্ষা জমা হয়েছে</h1>
+      <p id="resultText"></p>
+      <div class="status success" id="resultStatus"></div>
+      <p class="muted">
+        চূড়ান্ত ফলাফল প্রতিষ্ঠান যাচাই করার পর প্রকাশ করা হতে পারে।
+      </p>
+    </section>
+  </main>
+
+  <footer>
+    MH2 IT Center · Online Examination System
+  </footer>
+
+  <script>
     
+  </script>
 </body>
 </html>
