@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#071b22">
+<title>MH2 IT Center - Teacher Admin Panel</title>
+<style>
+:root{color-scheme:dark;--bg:#071b22;--panel:#0d2931;--panel2:#12343d;--text:#eaf5f5;--muted:#a9c0c4;--accent:#58d5c9;--accent2:#9ef0d7;--danger:#ff7d88;--ok:#72e0a5;--warn:#ffd479;--border:rgba(158,240,215,.18);--r:14px}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;font-family:Inter,"Segoe UI",Arial,sans-serif;background:radial-gradient(ellipse at top,#103640 0,var(--bg) 55%);color:var(--text);line-height:1.55}
+header{display:flex;align-items:center;gap:14px;padding:14px clamp(14px,4vw,40px);border-bottom:1px solid var(--border);background:rgba(4,20,25,.85);position:sticky;top:0;z-index:20}
+.logo{width:48px;height:48px;object-fit:cover;border-radius:12px;border:1px solid var(--border)}
+.brand{font-weight:800;flex:1}
+.brand small{display:block;color:var(--muted);font-size:.78rem;font-weight:500}
+main{width:min(1100px,calc(100% - 24px));margin:20px auto 40px}
+.card{padding:clamp(14px,3vw,24px);margin-bottom:16px;border:1px solid var(--border);border-radius:var(--r);background:linear-gradient(145deg,rgba(18,52,61,.97),rgba(9,34,42,.97));min-width:0}
+.narrow{max-width:460px;margin:40px auto}
+h1,h2,h3,p{margin-top:0}
+h1{font-size:1.5rem}
+h2{font-size:1.15rem;margin-bottom:12px}
+h3{font-size:1rem}
+.muted{color:var(--muted);font-size:.9rem}
+.hidden{display:none!important}
+label{display:block;margin:12px 0 5px;font-weight:700;font-size:.9rem}
+input[type=text],input[type=password],input[type=number],textarea,select{width:100%;border:1px solid var(--border);border-radius:10px;background:#061b21;color:var(--text);padding:11px 12px;font:inherit;outline:none}
+input:focus,textarea:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(88,213,201,.14)}
+textarea{resize:vertical;min-height:90px}
+.check{display:flex;align-items:center;gap:8px;margin:8px 0;font-weight:600}
+.check input{width:18px;height:18px;accent-color:var(--accent)}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:9px 16px;border:0;border-radius:10px;background:var(--accent);color:#062126;font:inherit;font-weight:800;cursor:pointer}
+.btn:hover{filter:brightness(1.07)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn.secondary{background:var(--panel2);color:var(--text);border:1px solid var(--border)}
+.btn.danger{background:#6a2c35;color:#fff}
+.btn.sm{min-height:34px;padding:5px 11px;font-size:.85rem}
+.full{width:100%}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+.status{padding:10px 12px;margin:12px 0;border-radius:10px;background:rgba(158,240,215,.07);border:1px solid var(--border);color:var(--muted);overflow-wrap:anywhere}
+.status.error{color:#ffd0d4;border-color:rgba(255,125,136,.4);background:rgba(255,125,136,.09)}
+.status.success{color:var(--ok);border-color:rgba(114,224,165,.4)}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.tabs button{flex:1;min-width:120px;padding:11px;border:1px solid var(--border);border-radius:10px;background:var(--panel);color:var(--text);font:inherit;font-weight:700;cursor:pointer}
+.tabs button[aria-selected=true]{background:var(--accent);color:#062126}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:16px}
+.stat{padding:14px;border:1px solid var(--border);border-radius:12px;background:rgba(4,20,25,.4)}
+.stat span{display:block;color:var(--muted);font-size:.8rem}
+.stat strong{font-size:1.25rem;overflow-wrap:anywhere}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:16px}
+.item{padding:13px;margin-top:10px;border:1px solid var(--border);border-radius:12px;background:rgba(4,20,25,.35);overflow-wrap:anywhere}
+.item-head{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.item p{margin:4px 0}
+.pill{display:inline-block;padding:2px 10px;border-radius:999px;font-size:.78rem;font-weight:800;white-space:nowrap;background:rgba(158,240,215,.14);color:var(--accent2)}
+.pill.open,.pill.published,.pill.final,.pill.correct,.pill.graded{background:rgba(114,224,165,.16);color:var(--ok)}
+.pill.closed,.pill.wrong,.pill.disabled{background:rgba(255,125,136,.16);color:var(--danger)}
+.pill.draft,.pill.modified,.pill.pending,.pill.partial,.pill.manual{background:rgba(255,212,121,.16);color:var(--warn)}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.pre{white-space:pre-wrap;overflow-wrap:anywhere}
+.preview{margin-top:10px;padding:12px;border:1px dashed var(--border);border-radius:10px}
+.blankline{display:inline-block;min-width:90px;border-bottom:2px solid var(--accent);margin:0 4px}
+.answerbox{padding:10px;border-radius:8px;background:#061b21;border:1px solid var(--border);margin:6px 0}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);max-width:min(560px,calc(100% - 24px));padding:12px 18px;border-radius:12px;background:#0f3b36;border:1px solid var(--ok);color:var(--text);z-index:50;box-shadow:0 10px 30px rgba(0,0,0,.4)}
+.toast.error{background:#43202a;border-color:var(--danger)}
+.opt-row{display:grid;grid-template-columns:auto 1fr;gap:8px;align-items:center;margin-top:8px}
+.opt-row input[type=radio]{width:18px;height:18px;accent-color:var(--accent)}
+.opt-row span{grid-column:1/-1}
+@media(max-width:560px){header{padding:10px}.tabs button{min-width:46%}}
+</style>
+</head>
+<body>
+<header>
+<img class="logo" src="https://i.pinimg.com/736x/df/1d/9a/df1d9a56ddb5b483abcf894814c8486b.jpg" alt="MH2 IT Center logo">
+<div class="brand">MH2 IT Center<small>Teacher Admin Panel</small></div>
+<button id="logoutBtn" class="btn secondary sm hidden" type="button">Sign Out</button>
+</header>
+<main>
+<section id="loginView" class="card narrow">
+<h1>Teacher Access</h1>
+<form id="loginForm">
+<label for="teacherCode">Teacher access code</label>
+<input id="teacherCode" type="password" autocomplete="current-password" required>
+<div id="loginStatus" class="status" role="status">Enter the teacher access code to continue.</div>
+<button id="loginBtn" class="btn full" type="submit">Sign In</button>
+</form>
+</section>
+
+<div id="dashboard" class="hidden">
+<div class="tabs" role="tablist" aria-label="Admin sections">
+<button type="button" role="tab" data-tab="exam" aria-selected="true">Examination</button>
+<button type="button" role="tab" data-tab="students" aria-selected="false">Students</button>
+<button type="button" role="tab" data-tab="questions" aria-selected="false">Questions</button>
+<button type="button" role="tab" data-tab="submissions" aria-selected="false">Submissions</button>
+</div>
+
+<section id="tab-exam" class="tab">
+<div class="stats">
+<div class="stat"><span>Status</span><strong id="stStatus">—</strong></div>
+<div class="stat"><span>Published questions</span><strong id="stPublished">0</strong></div>
+<div class="stat"><span>Draft questions</span><strong id="stDrafts">0</strong></div>
+<div class="stat"><span>Registered students</span><strong id="stStudents">0</strong></div>
+<div class="stat"><span>Session ID</span><strong id="stSession">—</strong></div>
+</div>
+<div class="card">
+<h2>Examination Settings</h2>
+<label for="examTitle">Examination title</label>
+<input id="examTitle" type="text" maxlength="150">
+<label for="examInstructions">Instructions</label>
+<textarea id="examInstructions" maxlength="2000"></textarea>
+<label for="examDuration">Duration (minutes)</label>
+<input id="examDuration" type="number" min="1" max="300" step="1" value="30">
+<label class="check"><input id="requireCode" type="checkbox"> Require an exam code</label>
+<label for="examCode">Exam code</label>
+<input id="examCode" type="text" maxlength="80" autocomplete="off">
+<div class="actions">
+<button id="saveSettings" class="btn" type="button">Save Settings</button>
+<button id="openExam" class="btn secondary" type="button">Start / Open Exam</button>
+<button id="closeExam" class="btn danger" type="button">Close Exam</button>
+<button id="newSession" class="btn secondary" type="button">Start New Session</button>
+</div>
+<div id="examMsg" class="status" role="status">Settings are synchronized with the student page after saving.</div>
+</div>
+</section>
+
+<section id="tab-students" class="tab hidden">
+<div class="grid">
+<div class="card">
+<h2 id="sFormTitle">Add Student</h2>
+<form id="sForm" novalidate>
+<label for="sName">Full name</label>
+<input id="sName" type="text" maxlength="100" autocomplete="off">
+<label for="sId">Student ID</label>
+<input id="sId" type="text" maxlength="50" autocomplete="off">
+<p class="muted">Letters, numbers, hyphens and underscores only.</p>
+<div class="actions">
+<button id="sSave" class="btn" type="submit">Add Student</button>
+<button id="sCancel" class="btn secondary hidden" type="button">Cancel Edit</button>
+</div>
+</form>
+<div id="sMsg" class="status" role="status">Registered students can start the examination.</div>
+</div>
+<div class="card">
+<h2>Registered Students <span id="sCount" class="pill">0</span></h2>
+<label for="sSearch">Search by name or ID</label>
+<input id="sSearch" type="text" placeholder="Search…">
+<div id="sList"></div>
+</div>
+</div>
+</section>
+
+<section id="tab-questions" class="tab hidden">
+<div class="card">
+<h2>Question Types in This Exam</h2>
+<div class="actions" style="margin-top:0">
+<label class="check"><input id="tMcq" type="checkbox"> MCQ</label>
+<label class="check"><input id="tFill" type="checkbox"> Fill in the Blank</label>
+<label class="check"><input id="tWritten" type="checkbox"> Written Questions</label>
+</div>
+<div id="typesMsg" class="status" role="status">Select any combination of types. Changes are saved immediately.</div>
+</div>
+<div class="card">
+<h2 id="qFormTitle">Add Question</h2>
+<form id="qForm" novalidate>
+<label for="qType">Question type</label>
+<select id="qType"></select>
+<label for="qText">Question text</label>
+<textarea id="qText" maxlength="3000"></textarea>
+<div id="fillHint" class="muted hidden">Type == where each blank should appear. Example: The capital of Bangladesh is ==.</div>
+<div id="mcqBox">
+<label>Answer options (select the correct one)</label>
+<div class="opt-row"><input type="radio" name="qCorrect" value="a" aria-label="Correct answer A"><input id="qA" type="text" maxlength="500" aria-label="Option A" placeholder="Option A"></div>
+<div class="opt-row"><input type="radio" name="qCorrect" value="b" aria-label="Correct answer B"><input id="qB" type="text" maxlength="500" aria-label="Option B" placeholder="Option B"></div>
+<div class="opt-row"><input type="radio" name="qCorrect" value="c" aria-label="Correct answer C"><input id="qC" type="text" maxlength="500" aria-label="Option C" placeholder="Option C"></div>
+<div class="opt-row"><input type="radio" name="qCorrect" value="d" aria-label="Correct answer D"><input id="qD" type="text" maxlength="500" aria-label="Option D" placeholder="Option D"></div>
+</div>
+<div id="fillBox" class="hidden">
+<label>Expected answer for each blank</label>
+<div id="blankInputs"></div>
+<p class="muted">Separate accepted alternatives with | (for example: Dhaka|Dacca).</p>
+<label class="check"><input id="qCase" type="checkbox"> Case sensitive</label>
+<label class="check"><input id="qTrim" type="checkbox" checked> Ignore surrounding whitespace</label>
+</div>
+<div id="writtenBox" class="hidden">
+<label for="qGuide">Answer guidelines (teacher only)</label>
+<textarea id="qGuide" maxlength="3000"></textarea>
+</div>
+<label for="qMarks">Marks</label>
+<input id="qMarks" type="number" min="0.5" max="100" step="0.5" value="1">
+<div class="actions">
+<button id="qSave" class="btn" type="submit">Save Draft Question</button>
+<button id="qCancel" class="btn secondary hidden" type="button">Cancel Edit</button>
+</div>
+</form>
+<div id="qMsg" class="status" role="status">Saved questions remain drafts until you publish them.</div>
+</div>
+<div class="card">
+<h2>Questions <span id="qInfo" class="pill">0</span></h2>
+<div class="actions" style="margin-top:0">
+<button id="publishBtn" class="btn" type="button">Publish Questions</button>
+<button id="reloadBtn" class="btn secondary" type="button">Reload from Firebase</button>
+</div>
+<p id="pendingNote" class="muted"></p>
+<div id="qList"></div>
+</div>
+</section>
+
+<section id="tab-submissions" class="tab hidden">
+<div class="card">
+<h2>Submissions</h2>
+<label for="subExam">Examination session</label>
+<select id="subExam"></select>
+<div class="actions">
+<button id="subRefresh" class="btn secondary" type="button">Refresh Sessions</button>
+</div>
+<div id="subList"></div>
+</div>
+<div id="reviewBox" class="card hidden" aria-live="polite"></div>
+<div class="card">
+<h2>Attempts In Progress</h2>
+<div id="attList"></div>
+</div>
+</section>
+</div>
+</main>
+<div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
+
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
+
+
+
+<script src="admin.js"></script>
+</body>
+</html>
