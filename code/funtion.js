@@ -6,15 +6,15 @@
 
   // MH2 IT Center Firebase configuration
   const firebaseConfig = {
-    apiKey: "AIzaSyC9P2e4Fj07uvyXN85YlL0_0fSJrwtA2nY",
-    authDomain: "mh2-it-center.firebaseapp.com",
+    apiKey: "AIza********************nY",
+    authDomain: "mh2********************om",
     databaseURL:
-      "https://mh2-it-center-default-rtdb.asia-southeast1.firebasedatabase.app",
-    projectId: "mh2-it-center",
-    storageBucket: "mh2-it-center.firebasestorage.app",
-    messagingSenderId: "214594920215",
-    appId: "1:214594920215:web:1dbcf7d2069ff32b3e2152",
-    measurementId: "G-Q43HCD8PPR"
+      "https://mh2-it-cent**********************se.app",
+    projectId: "mh*********ter",
+    storageBucket: "mh2-it-ce*****age.app",
+    messagingSenderId: "2145***0215",
+    appId: "1:21459******3e2152",
+    measurementId: "G-Q4****************8PPR"
   };
 
   const db = firebase.initializeApp(firebaseConfig).database();
