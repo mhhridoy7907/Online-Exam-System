@@ -2,8 +2,6 @@
 (() => {
   "use strict";
 
-<<<<<<< HEAD:code/funtion.js
-  // MH2 IT Center Firebase configuration
   const firebaseConfig = {
     apiKey: "AIza********************nY",
     authDomain: "mh2********************om",
@@ -14,15 +12,7 @@
     appId: "1:21459******3e2152",
     measurementId: "G-Q4****************8PPR"
   };
-=======
-     // MH2 IT Center Firebase configuration
-    //***********************************
-    // MH2 IT Center Firebase configuration
->>>>>>> 17193ac (Update admin and student exam system):code/student/funtion.js
 
-  const db = firebase.initializeApp(firebaseConfig).database();
-
-  // Database paths
   const PATH = {
     exam: "exams/active",
     students: "students",
@@ -235,7 +225,6 @@
         throw new Error("This browser has already submitted this attempt.");
       }
 
-      // Restore only answers belonging to current questions.
       for (const q of state.questions) {
         if (Object.prototype.hasOwnProperty.call(saved.answers, q.id)) {
           state.answers[q.id] = saved.answers[q.id];
